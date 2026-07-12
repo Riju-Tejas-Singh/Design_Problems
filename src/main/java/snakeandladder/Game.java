@@ -100,6 +100,7 @@ public class Game {
         int finalPosition = board.getFinalPosition(nextPosition);
         player.setPosition(finalPosition);
 
+
         if (finalPosition > nextPosition) { // Ladder
             System.out.printf("Wow! %s found a ladder 🪜 at %d and climbed to %d.\n", player.getName(), nextPosition, finalPosition);
         } else if (finalPosition < nextPosition) { // Snake
@@ -107,6 +108,7 @@ public class Game {
         } else {
             System.out.printf("%s moved from %d to %d.\n", player.getName(), currentPosition, finalPosition);
         }
+
 
         if (roll == 6) {
             System.out.printf("%s rolled a 6 and gets another turn!\n", player.getName());
