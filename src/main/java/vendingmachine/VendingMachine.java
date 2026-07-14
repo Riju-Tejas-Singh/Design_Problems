@@ -7,7 +7,7 @@ import vendingmachine.state.IdleState;
 import vendingmachine.state.VendingMachineState;
 
 public class VendingMachine {
-    private static VendingMachine instance;
+    private static volatile VendingMachine instance;
     private final Inventory inventory = new Inventory();
     private VendingMachineState currentState;
     private int balance;
