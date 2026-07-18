@@ -2,13 +2,12 @@ package loggingframework;
 
 import loggingframework.enums.LogLevel;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LogManager {
-    private final Map<String, Logger> logs;
+    private final ConcurrentHashMap<String, Logger> logs;
     private LogManager() {
-        logs = new HashMap<>();
+        this.logs = new ConcurrentHashMap<>();
     }
     private static class Holder {
         private static final LogManager INSTANCE = new LogManager();

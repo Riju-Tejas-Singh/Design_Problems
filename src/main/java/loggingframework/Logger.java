@@ -4,19 +4,19 @@ import loggingframework.entities.LogMessage;
 import loggingframework.enums.LogLevel;
 import loggingframework.strategies.appender.LogAppender;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Logger {
 
     private final String name;
-    private LogLevel level;
+    private volatile LogLevel level;
     private final List<LogAppender> appenders;
 
     public Logger(String name, LogLevel level) {
         this.name = name;
         this.level = level;
-        this.appenders = new ArrayList<>();
+        this.appenders = new CopyOnWriteArrayList<>();
     }
 
     public void addAppender(LogAppender appender) {

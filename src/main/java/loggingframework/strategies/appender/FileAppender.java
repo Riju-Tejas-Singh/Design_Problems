@@ -22,7 +22,7 @@ public class FileAppender implements LogAppender {
     }
 
     @Override
-    public void append(LogMessage message) {
+    public synchronized void append(LogMessage message) {
         try {
             writer.write(formatter.format(message));
             writer.write(System.lineSeparator());
