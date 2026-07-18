@@ -28,16 +28,12 @@ public class Main {
 
         logger.addAppender(consoleAppender);
         logger.addAppender(fileAppender);
-
-        logger.debug("Debug Message");
+        
         logger.info("Payment Successful");
         logger.warn("Low Balance");
         logger.error("Database Down");
-        logger.fatal("Application Crashed");
     }
-    //      [2026-07-18T13:14:21.937664] [DEBUG] Debug Message
     //      [2026-07-18T13:14:21.948127] [INFO] Payment Successful
     //      [2026-07-18T13:14:21.948267] [WARN] Low Balance
     //      [2026-07-18T13:14:21.948380] [ERROR] Database Down
-    //      [2026-07-18T13:14:21.948500] [FATAL] Application Crashed
 }

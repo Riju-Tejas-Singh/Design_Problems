@@ -16,6 +16,9 @@ public class LogManager {
         return Holder.INSTANCE;
     }
 
+    /**
+     * Setting default level to info, can be changed by setter
+     */
     public Logger getLogger(String name) {
         return logs.computeIfAbsent(name, loggerName -> new Logger(loggerName, LogLevel.INFO));
     }
