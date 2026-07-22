@@ -28,7 +28,7 @@ public class AuthenticatedState implements ATMState {
                     break;
                 }
 
-                double accountBalance = atmSystem.getBankService().getBalance(atmSystem.getCurrentCard());
+                double accountBalance = atmSystem.getBalance(atmSystem.getCurrentCard());
 
                 if (amount > accountBalance) {
                     System.out.println("Error: Insufficient balance.");

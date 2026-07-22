@@ -14,12 +14,10 @@ public class Account {
         balance += amount;
     }
 
-    public synchronized boolean withdraw(double amount) {
+    public synchronized void withdraw(double amount) {
         if (balance >= amount) {
             balance -= amount;
-            return true;
         }
-        return false;
     }
 
     // getters

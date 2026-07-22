@@ -14,6 +14,9 @@ public abstract class CashDispenser {
         this.nextChain = nextChain;
     }
 
+    /**
+     * Dispensing Notes from the ATM, (not deducting from the account)
+     */
     public synchronized void dispenseCash(int amount) {
 
         int notes = Math.min(amount / noteValue, numNotes);

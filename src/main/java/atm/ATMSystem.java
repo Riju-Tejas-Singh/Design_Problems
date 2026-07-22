@@ -4,20 +4,36 @@ import atm.chainofresponsibility.CashDispenser;
 import atm.chainofresponsibility.CashDispenser100;
 import atm.chainofresponsibility.CashDispenser20;
 import atm.chainofresponsibility.CashDispenser50;
-import atm.entities.BankService;
+import atm.entities.Account;
 import atm.entities.Card;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import atm.enums.OperationType;
 import atm.state.ATMState;
 import atm.state.IdleState;
 
 public class ATMSystem {
-    private final BankService bankService;
+    // both hashmaps act as DBs
+    private final Map<String, Card> cards = new ConcurrentHashMap<>();
+    private final Map<Card, Account> cardAccountMap = new ConcurrentHashMap<>();
+    // fields
     private final CashDispenser cashDispenser;
     private ATMState currentState;
     private Card currentCard;
 
     private ATMSystem() {
-        this.bankService = new BankService();
+        // Create sample accounts and cards (inlined from former BankService)
+        Account account1 = new Account("1234567890", 1000.0);
+        Card card1 = new Card("1234-5678-9012-3456", "1234");
+
+        Account account2 = new Account("9876543210", 500.0);
+        Card card2 = new Card("9876-5432-1098-7654", "4321");
+
+        cards.put(card1.getCardNumber(), card1);
+        cards.put(card2.getCardNumber(), card2);
+        cardAccountMap.put(card1, account1);
+        cardAccountMap.put(card2, account2);
+
         CashDispenser c1 = new CashDispenser100(10);
         CashDispenser c2 = new CashDispenser50(20);
         CashDispenser c3 = new CashDispenser20(30);
@@ -52,7 +68,7 @@ public class ATMSystem {
 
     // after going to operation state
     public void checkBalance() {
-        double balance = bankService.getBalance(currentCard);
+        double balance = getBalance(currentCard);
         System.out.printf("Your current account balance is: $%.2f%n", balance);
     }
 
@@ -62,30 +78,30 @@ public class ATMSystem {
         }
 
         // money deducted from account
-        bankService.withdrawMoney(currentCard, amount);
+        cardAccountMap.get(currentCard).withdraw(amount);
         // notes deducted from atm
         cashDispenser.dispenseCash(amount);
     }
 
     public void depositCash(int amount) {
-        bankService.depositMoney(currentCard, amount);
+        cardAccountMap.get(currentCard).deposit(amount);
     }
 
     // other get operations
     public Card getCardFromNumber(String cardNumber) {
-        return bankService.getCardFromNumber(cardNumber);
+        return cards.getOrDefault(cardNumber, null);
     }
 
     public boolean authenticate(String pin) {
-        return bankService.authenticate(currentCard, pin);
+        return currentCard.getPin().equals(pin);
+    }
+
+    public double getBalance(Card card) {
+        return cardAccountMap.get(card).getBalance();
     }
 
     public Card getCurrentCard() {
         return currentCard;
-    }
-
-    public BankService getBankService() {
-        return bankService;
     }
 
     // setters
