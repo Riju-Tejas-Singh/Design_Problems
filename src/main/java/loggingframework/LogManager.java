@@ -18,6 +18,8 @@ public class LogManager {
 
     /**
      * Setting default level to info, can be changed by setter
+     * <p>
+     * Map key not really being used
      */
     public Logger getLogger(String name) {
         return logs.computeIfAbsent(name, loggerName -> new Logger(loggerName, LogLevel.INFO));
