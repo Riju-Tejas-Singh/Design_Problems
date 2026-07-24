@@ -87,17 +87,18 @@ public class ATMSystem {
         cardAccountMap.get(currentCard).deposit(amount);
     }
 
-    // other get operations
-    public Card getCardFromNumber(String cardNumber) {
-        return cards.getOrDefault(cardNumber, null);
-    }
-
+    // other atm operations
     public boolean authenticate(String pin) {
         return currentCard.getPin().equals(pin);
     }
 
     public double getBalance(Card card) {
         return cardAccountMap.get(card).getBalance();
+    }
+
+    // getters
+    public Card getCardFromNumber(String cardNumber) {
+        return cards.getOrDefault(cardNumber, null);
     }
 
     public Card getCurrentCard() {
