@@ -36,13 +36,13 @@ public class ParkingLot {
         return Holder.INSTANCE;
     }
 
-    public Optional<ParkingTicket> parkVehicle(Vehicle vehicle) {
+    public Optional<ParkingTicket> parkVehicleAndGenerateTicket(Vehicle vehicle) {
         Optional<ParkingSpot> availableSpot = parkingStrategy.findSpot(floors, vehicle);
         if (availableSpot.isPresent()) {
             ParkingSpot spot = availableSpot.get();
             spot.parkVehicle(vehicle);
             ParkingTicket ticket = new ParkingTicket(spot, vehicle);
-            activeTickets.put(vehicle.getLicenseNumber(), ticket);
+            activeTickets.put(ticket.getTicketId(), ticket);
             System.out.printf("%s parked at %s. Ticket: %s\n", vehicle.getLicenseNumber(), spot.getSpotId(), ticket.getTicketId());
             return Optional.of(ticket);
         }
@@ -50,10 +50,10 @@ public class ParkingLot {
         return Optional.empty();
     }
 
-    public Optional<Double> unparkVehicle(String licenseNumber) {
-        ParkingTicket ticket = activeTickets.remove(licenseNumber);
+    public Optional<Double> unparkVehicleAndCalculateFee(String ticketId) {
+        ParkingTicket ticket = activeTickets.remove(ticketId);
         if (ticket == null) {
-            System.out.println("No ticket found for " + licenseNumber);
+            System.out.println("No ticket found for " + ticketId);
             return Optional.empty();
         }
         ticket.setExitTimestamp();

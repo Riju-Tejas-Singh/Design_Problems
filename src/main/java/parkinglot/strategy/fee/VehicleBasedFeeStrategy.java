@@ -3,7 +3,6 @@ package parkinglot.strategy.fee;
 import parkinglot.entities.ParkingTicket;
 import parkinglot.vehicle.VehicleSize;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class VehicleBasedFeeStrategy implements FeeStrategy {

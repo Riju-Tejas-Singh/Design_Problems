@@ -3,6 +3,9 @@ package parkinglot;
 import parkinglot.entities.ParkingFloor;
 import parkinglot.entities.ParkingSpot;
 import parkinglot.entities.ParkingTicket;
+import parkinglot.factory.VehicleFactory;
+import parkinglot.gates.EntryGate;
+import parkinglot.gates.ExitGate;
 import parkinglot.strategy.fee.VehicleBasedFeeStrategy;
 import parkinglot.vehicle.*;
 
@@ -12,6 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         // 1. Initialize the parking lot with floors and spots
+
         ParkingLot parkingLot = ParkingLot.getInstance();
         ParkingFloor floor1 = new ParkingFloor(1);
         floor1.addSpot(new ParkingSpot("F1-S1", VehicleSize.SMALL));
@@ -25,38 +29,43 @@ public class Main {
         parkingLot.addFloor(floor2);
         parkingLot.setFeeStrategy(new VehicleBasedFeeStrategy());
 
+        // Create Entry and Exit gates
+        EntryGate entryGate = new EntryGate(parkingLot);
+        ExitGate exitGate = new ExitGate(parkingLot);
+
         // 2. Simulate vehicle entries
-        Vehicle bike = new Bike("B-123");
-        Vehicle car = new Car("C-456");
-        Vehicle truck = new Truck("T-789");
+
+        Vehicle bike = VehicleFactory.createVehicle(VehicleSize.SMALL, "B-123");
+        Vehicle car = VehicleFactory.createVehicle(VehicleSize.MEDIUM, "C-456");
+        Vehicle truck = VehicleFactory.createVehicle(VehicleSize.LARGE, "T-789");
 
         System.out.println("\n--- Vehicle Entries ---");
         floor1.displayAvailability();
         floor2.displayAvailability();
 
-        // 3. Park vehicles & get tickets
+        // 3. Park vehicles through entry gate & get tickets
 
-        Optional<ParkingTicket> bikeTicketOpt = parkingLot.parkVehicle(bike);
-        Optional<ParkingTicket> carTicketOpt = parkingLot.parkVehicle(car);
-        Optional<ParkingTicket> truckTicketOpt = parkingLot.parkVehicle(truck);
+        Optional<ParkingTicket> bikeTicketOpt = entryGate.processEntry(bike);
+        Optional<ParkingTicket> carTicketOpt = entryGate.processEntry(car);
+        Optional<ParkingTicket> truckTicketOpt = entryGate.processEntry(truck);
 
         System.out.println("\n--- Availability after parking ---");
         floor1.displayAvailability();
         floor2.displayAvailability();
 
-        // 2.1 Simulate another car entry (should go to floor 2)
+        // 2.1 & 3.1 Simulate another car entry (should go to floor 2)
         Vehicle car2 = new Car("C-999");
-        Optional<ParkingTicket> car2TicketOpt = parkingLot.parkVehicle(car2);
+        Optional<ParkingTicket> car2TicketOpt = entryGate.processEntry(car2);
 
-        // 3.1 Simulate a vehicle entry that fails (no available spots)
+        // 2.2 & 3.2 Simulate a vehicle entry that fails (no available spots)
         Vehicle truck2 = new Truck("T-000");
-        Optional<ParkingTicket> failedBikeTicketOpt = parkingLot.parkVehicle(truck2);
+        Optional<ParkingTicket> failedBikeTicketOpt = entryGate.processEntry(truck2);
 
-        // 4. Unpark and fee calculation
+        // 4. Unpark and fee calculation through exit gate
         System.out.println("\n--- Vehicle Exits ---");
 
         if (carTicketOpt.isPresent()) {
-            Optional<Double> feeOpt = parkingLot.unparkVehicle(car.getLicenseNumber());
+            Optional<Double> feeOpt = exitGate.processExit(carTicketOpt.get().getTicketId());
             feeOpt.ifPresent(fee -> System.out.printf("Car C-456 unparked. Fee: $%.2f\n", fee));
         }
 

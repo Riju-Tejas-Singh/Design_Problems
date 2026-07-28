@@ -27,9 +27,6 @@ public class ParkingSpot {
     public boolean isAvailable() {
         return !isOccupied;
     }
-    public Vehicle getParkedVehicle() {
-        return parkedVehicle;
-    }
 
     // operations on parking spot
     public synchronized void parkVehicle(Vehicle vehicle) {

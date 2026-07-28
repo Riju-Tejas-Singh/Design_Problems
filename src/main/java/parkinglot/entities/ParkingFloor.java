@@ -35,10 +35,6 @@ public class ParkingFloor {
     }
 
     // getter & setter
-    public int getFloorNumber() {
-        return floorNumber;
-    }
-
     public void addSpot(ParkingSpot parkingSpot) {
         spots.put(parkingSpot.getSpotId(), parkingSpot);
     }
