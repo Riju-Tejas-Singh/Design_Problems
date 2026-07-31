@@ -2,6 +2,7 @@ package carrentalsystem.entities;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 public class Reservation {
     private final String reservationId;
@@ -11,8 +12,8 @@ public class Reservation {
     private final LocalDate endDate;
     private final double totalPrice;
 
-    public Reservation(String reservationId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
-        this.reservationId = reservationId;
+    public Reservation(Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
+        this.reservationId = "RES" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         this.customer = customer;
         this.car = vehicle;
         this.startDate = startDate;
